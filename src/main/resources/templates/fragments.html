@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<div xmlns:th="http://www.thymeleaf.org">
+    <nav th:fragment="menu">
+        <ul>
+            <li><a th:href="@{/orders}">Unshiped Orders</a></li>
+        </ul>
+    </nav>
+    <head th:fragment="head(title)">
+        <title th:text="${title}"></title>
+        <link rel="icon" href="images/toysforboys.ico" type="image/x-icon">
+        <link rel="stylesheet" th:href="@{/css/toys.css}">
+    </head>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="nl " xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::head(title='Toys For Boys')"></head>
+<body>
+<h2>Unshiped Orders</h2>
+<table>
+    <form th:if="${orders}"
+          method="get" th:action="@{/orders}">
+        <div th:each="order, custStat:${orders}" th:object="${order}">
+            <thead th:if="${custStat.first}">
+            <tr>
+                <th>ID</th>
+                <th>Ordered</th>
+                <th>Required</th>
+                <th>Customer</th>
+                <th>Comments</th>
+                <th>Status</th>
+                <th>Ship</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a th:text="*{id}"
+                       th:href="@{/bevestigen/{orderid}(orderid=*{id})}"></a></td>
+                <td th:text="*{ordered}"></td>
+                <td th:text="*{required}"></td>
+                <td th:text="*{shipped}"></td>
+                <td th:text="*{comments}"></td>
+                <td th:text="*{status}">
+                    <img th:src="@{/images/{naam}.png(naam=*{status})}" th:alt="*{status}">
+                </td>
+                <td><input name="id" type="checkbox"></td>
+            </tr>
+            </tbody>
+        </div>
+    </form>
+</table>
+</body>
+</html>
