@@ -4,6 +4,7 @@ import org.hibernate.mapping.Collection;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -18,11 +19,14 @@ public class Product {
     @NotEmpty
     private String name;
     @NotEmpty
+    @PositiveOrZero
     private String scale;
     private String description;
     @NotEmpty
+    @PositiveOrZero
     private int inStock;
     @NotEmpty
+    @PositiveOrZero
     private int inOrder;
     @NotEmpty
     private BigDecimal price;
@@ -39,7 +43,6 @@ public class Product {
 
 
     protected Product(){}
-
     public Product(@NotEmpty String name, @NotEmpty String scale, String description, @NotEmpty int inStock,
                    @NotEmpty int inOrder, @NotEmpty BigDecimal price, @NotEmpty int version,
                    Productline productline) {
@@ -54,11 +57,10 @@ public class Product {
         this.orderdetailSet=new LinkedHashSet<>();
     }
     public boolean add(Orderdetail orderdetail) {
-        var toegevoegd = false;
-        if (orderdetail != null) {
-            toegevoegd = orderdetailSet.add(orderdetail);
+        if (orderdetail == null) {
+            throw new NullPointerException();
         }
-        return toegevoegd;
+        return orderdetailSet.add(orderdetail);
     }
     public String getName() {
         return name;

@@ -18,8 +18,6 @@ public class Customer {
     @NotEmpty
     private String city;
     private String state;
-    @Min(1000)
-    @Max(99999)
     private String postalCode;
     @NotEmpty
     private int version;

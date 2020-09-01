@@ -1,0 +1,1 @@
+insert into countries (name,version) values ('test',1);

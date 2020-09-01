@@ -1,0 +1,1 @@
+insert into productlines (name,description,version) values ('test','test',0);

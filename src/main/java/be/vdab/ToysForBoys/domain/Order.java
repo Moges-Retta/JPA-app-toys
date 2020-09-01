@@ -2,6 +2,7 @@ package be.vdab.ToysForBoys.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -20,11 +21,13 @@ public class Order {
     @NotEmpty
     private LocalDate shipped;
     @NotEmpty
+    @PositiveOrZero
     private int version;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "customerId")
     private Customer customer;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -82,5 +85,13 @@ public class Order {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setShipped(LocalDate shipped) {
+        this.shipped = shipped;
     }
 }

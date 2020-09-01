@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+    <named-query name='Order.updateStatus'>
+        <query> update Order o set o.status = :status where o.id = :id</query>
+    </named-query>
+    <named-query name='Order.updateShipped'>
+        <query> update Order o set o.shipped = :shipped where o.id = :id</query>
+    </named-query>
+    <named-query name='Product.updateInStock'>
+        <query> update Product p set p.inStock = :stockValue where p.id = :id
+        </query>
+    </named-query>
+    <named-query name='Product.updateInOrder'>
+        <query> update Product p set p.inOrder = :orderValue where p.id = :id
+        </query>
+    </named-query>
+</entity-mappings>
