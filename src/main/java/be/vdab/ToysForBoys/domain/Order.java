@@ -100,4 +100,10 @@ public class Order {
         }
         shipped=shippedValue;
     }
+    public void updateStatus(Status statusValue){
+        if(status==null){
+            throw new IllegalArgumentException();
+        }
+        status=statusValue;
+    }
 }

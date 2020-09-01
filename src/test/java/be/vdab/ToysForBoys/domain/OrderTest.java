@@ -39,4 +39,9 @@ public class OrderTest {
         order.updateShipped(LocalDate.of(2002,1,1));
         assertThat(order.getShipped()).isEqualTo(LocalDate.of(2002,1,1));
     }
+    @Test
+    void updateStatus(){
+        order.updateStatus(Status.DISPUTED);
+        assertThat(order.getStatus()).isEqualByComparingTo(Status.DISPUTED);
+    }
 }
