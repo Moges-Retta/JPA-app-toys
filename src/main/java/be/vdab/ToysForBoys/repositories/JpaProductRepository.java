@@ -3,10 +3,11 @@ package be.vdab.ToysForBoys.repositories;
 import be.vdab.ToysForBoys.domain.Order;
 import be.vdab.ToysForBoys.domain.Product;
 import be.vdab.ToysForBoys.domain.Status;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
-
+@Repository
 public class JpaProductRepository implements ProductRepository{
     private EntityManager manager;
 

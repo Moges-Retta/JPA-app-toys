@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface OrderService {
     Optional<Order> findById(int id);
-    int updateStatus(int id, Status status);
+    void updateStatusValue(int id, Status status);
     void updateShippedValue(int id, LocalDate shipped);
 }

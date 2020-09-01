@@ -4,10 +4,11 @@ import be.vdab.ToysForBoys.domain.Order;
 import be.vdab.ToysForBoys.domain.Status;
 import be.vdab.ToysForBoys.exceptions.OrderNietGevondenException;
 import be.vdab.ToysForBoys.repositories.OrderRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
+@Service
 public class DefaultOrderService implements OrderService{
     private OrderRepository repository;
 
@@ -21,8 +22,10 @@ public class DefaultOrderService implements OrderService{
     }
 
     @Override
-    public int updateStatus(int id, Status status) {
-        return repository.updateStatus(id,status);
+    public void updateStatusValue(int id, Status status) {
+         repository.findById(id)
+                .orElseThrow(OrderNietGevondenException::new)
+                .updateStatus(status);
     }
 
     @Override
