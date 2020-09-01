@@ -94,4 +94,10 @@ public class Order {
     public void setShipped(LocalDate shipped) {
         this.shipped = shipped;
     }
+    public void updateShipped(LocalDate shippedValue){
+        if(shippedValue==null){
+            throw new IllegalArgumentException();
+        }
+        shipped=shippedValue;
+    }
 }

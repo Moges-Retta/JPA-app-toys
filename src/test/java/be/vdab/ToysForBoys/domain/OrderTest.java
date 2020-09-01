@@ -34,4 +34,9 @@ public class OrderTest {
     void orderDetailNull(){
         assertThatNullPointerException().isThrownBy(() -> order.add(null));
     }
+    @Test
+    void updateShipped(){
+        order.updateShipped(LocalDate.of(2002,1,1));
+        assertThat(order.getShipped()).isEqualTo(LocalDate.of(2002,1,1));
+    }
 }
