@@ -5,10 +5,12 @@ import be.vdab.ToysForBoys.domain.Status;
 import be.vdab.ToysForBoys.exceptions.OrderNietGevondenException;
 import be.vdab.ToysForBoys.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
 @Service
+@Transactional
 public class DefaultOrderService implements OrderService{
     private OrderRepository repository;
 

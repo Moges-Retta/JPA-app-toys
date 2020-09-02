@@ -12,25 +12,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "products")
+@NamedEntityGraph(name = "Product.MET_PRODUCTLINE",
+        attributeNodes = @NamedAttributeNode("productline"))
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty
     private String name;
-    @NotEmpty
-    @PositiveOrZero
     private String scale;
     private String description;
-    @NotEmpty
-    @PositiveOrZero
     private int inStock;
-    @NotEmpty
-    @PositiveOrZero
     private int inOrder;
-    @NotEmpty
     private BigDecimal price;
-    @NotEmpty
     private int version;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "productlineId")
@@ -43,8 +36,8 @@ public class Product {
 
 
     protected Product(){}
-    public Product(@NotEmpty String name, @NotEmpty String scale, String description, @NotEmpty int inStock,
-                   @NotEmpty int inOrder, @NotEmpty BigDecimal price, @NotEmpty int version,
+    public Product(String name,  String scale, String description,  int inStock,
+                    int inOrder,  BigDecimal price,  int version,
                    Productline productline) {
         this.name = name;
         this.scale = scale;

@@ -7,19 +7,17 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "customers")
+@NamedEntityGraph(name = "Customer.MET_COUNTRY",
+        attributeNodes = @NamedAttributeNode("country"))
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty
     private String name;
-    @NotEmpty
     private String streetAndNumber;
-    @NotEmpty
     private String city;
     private String state;
     private String postalCode;
-    @NotEmpty
     private int version;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "countryId")
@@ -27,9 +25,9 @@ public class Customer {
 
     protected Customer(){}
 
-    public Customer(@NotEmpty String name, @NotEmpty String streetAndNumber,
-                    @NotEmpty String city, String state, String postalCode,
-                    @NotEmpty int version, Country country) {
+    public Customer( String name,  String streetAndNumber,
+                     String city, String state, String postalCode,
+                     int version, Country country) {
         this.name = name;
         this.streetAndNumber = streetAndNumber;
         this.city = city;

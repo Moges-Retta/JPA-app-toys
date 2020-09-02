@@ -4,9 +4,11 @@ import be.vdab.ToysForBoys.domain.Product;
 import be.vdab.ToysForBoys.exceptions.ProductNietGevondenException;
 import be.vdab.ToysForBoys.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 @Service
+@Transactional
 public class DefaultProductService implements ProductService{
     private ProductRepository repository;
 

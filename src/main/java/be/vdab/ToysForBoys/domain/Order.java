@@ -1,8 +1,7 @@
 package be.vdab.ToysForBoys.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -10,18 +9,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@NamedEntityGraph(name = "Order.MET_CUSTOMER",
+        attributeNodes = @NamedAttributeNode("customer"))
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty
     private LocalDate ordered;
-    @NotEmpty
     private LocalDate required;
-    @NotEmpty
     private LocalDate shipped;
-    @NotEmpty
-    @PositiveOrZero
     private int version;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -38,8 +34,8 @@ public class Order {
 
     protected Order(){}
 
-    public Order(@NotEmpty LocalDate ordered, @NotEmpty LocalDate required,
-                 @NotEmpty LocalDate shipped, @NotEmpty int version,
+    public Order(LocalDate ordered,  LocalDate required,
+                  LocalDate shipped,  int version,
                  Customer customer, Status status) {
         this.ordered = ordered;
         this.required = required;
