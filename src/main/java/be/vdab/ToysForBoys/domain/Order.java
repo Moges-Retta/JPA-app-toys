@@ -2,6 +2,7 @@ package be.vdab.ToysForBoys.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -18,6 +19,8 @@ public class Order {
     private LocalDate ordered;
     private LocalDate required;
     private LocalDate shipped;
+    private String comments;
+    @Version
     private int version;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -31,15 +34,20 @@ public class Order {
     @CollectionTable(name = "orderdetails",
             joinColumns = @JoinColumn(name = "orderId"))
     private Set<Orderdetail> orderdetailSet;
-
+    @ManyToMany
+    @JoinTable(name = "orderdetails",
+            joinColumns = @JoinColumn(name = "orderId"),
+            inverseJoinColumns = @JoinColumn(name = "productId"))
+    private Set<Product> products = new LinkedHashSet<>();
     protected Order(){}
 
     public Order(LocalDate ordered,  LocalDate required,
-                  LocalDate shipped,  int version,
+                  LocalDate shipped,  String comments, int version,
                  Customer customer, Status status) {
         this.ordered = ordered;
         this.required = required;
         this.shipped = shipped;
+        this.comments=comments;
         this.version = version;
         this.customer=customer;
         this.status=status;
@@ -101,5 +109,33 @@ public class Order {
             throw new IllegalArgumentException();
         }
         status=statusValue;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public BigDecimal totalValue(){
+        var totalPrijs = BigDecimal.ZERO;
+        orderdetailSet.forEach(orderdetail -> {
+            totalPrijs.add(orderdetail.getPriceEach()
+                    .multiply(orderdetail.getOrdered()));
+        });
+        return totalPrijs;
+    }
+    public boolean addMany(Product product) {
+        var toegevoegd = products.add(product);
+        if ( ! product.getOrders().contains(this)) {
+            product.addMany(this);
+        }
+        return toegevoegd;
+    }
+
+    public Set<Product> getProducts() {
+        return Collections.unmodifiableSet(products);
     }
 }

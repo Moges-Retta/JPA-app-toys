@@ -24,6 +24,7 @@ public class Product {
     private int inStock;
     private int inOrder;
     private BigDecimal price;
+    @Version
     private int version;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "productlineId")
@@ -33,7 +34,8 @@ public class Product {
     @CollectionTable(name = "orderdetails",
             joinColumns = @JoinColumn(name = "productId"))
     private Set<Orderdetail> orderdetailSet;
-
+    @ManyToMany(mappedBy = "products")
+    private Set<Order> orders = new LinkedHashSet<>();
 
     protected Product(){}
     public Product(String name,  String scale, String description,  int inStock,
@@ -105,5 +107,16 @@ public class Product {
             throw new IllegalArgumentException();
         }
         inStock = value;
+    }
+    public boolean addMany(Order order) {
+        var toegevoegd = orders.add(order);
+        if ( ! order.getProducts().contains(this)) {
+            order.addMany(this);
+        }
+        return toegevoegd;
+    }
+
+    public Set<Order> getOrders() {
+        return Collections.unmodifiableSet(orders);
     }
 }

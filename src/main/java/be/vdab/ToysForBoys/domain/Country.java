@@ -9,13 +9,12 @@ public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty
     private String name;
-    @NotEmpty
+    @Version
     private int version;
     protected Country(){}
 
-    public Country(@NotEmpty String name, @NotEmpty int version) {
+    public Country( String name,  int version) {
         this.name = name;
         this.version = version;
     }

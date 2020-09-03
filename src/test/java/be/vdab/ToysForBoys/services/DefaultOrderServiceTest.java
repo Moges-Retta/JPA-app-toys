@@ -32,7 +32,7 @@ public class DefaultOrderServiceTest {
         var country = new Country("test",1);
         var customer = new Customer("test","test","test",
                 "test","test",1,country);
-        order = new Order(date,date,date,1,customer, Status.PROCESSING);
+        order = new Order(date,date,date,"test",1,customer, Status.PROCESSING);
         service = new DefaultOrderService(repository);
     }
     @Test
@@ -48,5 +48,4 @@ public class DefaultOrderServiceTest {
                 .isThrownBy(()->service.updateStatusValue(-1, Status.DISPUTED));
         verify(repository).findById(-1);
     }
-
 }

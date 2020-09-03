@@ -12,18 +12,41 @@ import static org.assertj.core.api.Assertions.*;
 public class ProductTest {
     private Product product;
     private Orderdetail orderdetail;
+    private Customer customer;
+    private Productline productline;
+    private Order order;
+    private Country country;
+    private Product product1;
+    private Order order1;
+    private Orderdetail orderdetail1;
     @BeforeEach
     void beforeEach(){
-        var productline = new Productline("test","test",1);
+        var date = LocalDate.of(2001,1,1);
+        productline = new Productline("test","test",1);
         product = new Product("test","test","test",1,1,
                 BigDecimal.ONE,1,productline);
-        orderdetail = new Orderdetail(1,BigDecimal.ONE);
+        country=new Country("test",1);
+        customer = new Customer("test","test","test","test","3000",1,country);
+        order= new Order(date, date,date,"test",1,customer,Status.PROCESSING);
+        orderdetail = new Orderdetail(BigDecimal.ONE,BigDecimal.ONE);
+        product1 = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
+        order1= new Order(date, date,date,"test1",1,customer,Status.PROCESSING);
+        orderdetail1 = new Orderdetail(BigDecimal.ONE, BigDecimal.TEN);
     }
     @Test
     @DisplayName("order detail van product")
     void orderDetail(){
-        assertThat(product.add(orderdetail)).isTrue();
+        assertThat(product1.add(orderdetail)).isTrue();
+        assertThat(product1.add(orderdetail1)).isTrue();
+        assertThat(product1.getOrderdetailSet()).containsOnly(orderdetail,orderdetail1);
+
     }
+   /* @Test
+    @DisplayName("order detail komt voor in order")
+   /* void orderdetailOrder() {
+        assertThat(product.getOrderdetailSet()).contains(orderdetail);
+        assertThat(orderdetail.getProduct()).isEqualTo(product);
+    }*/
     @Test
     @DisplayName("null orderdetail toevoegen mislukt")
     void orderDetailNull(){

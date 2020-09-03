@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en " xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments::head(title='Toys For Boys')"></head>
+<body>
+        <div th:each="order,custStat:${orders}" th:object="${order}">
+            <h1 th:text="|Order *{id}|"></h1>
+            <dl th:if="${custStat.first}">
+                <dt>Ordered:</dt>
+                <dd><span th:text="*{ordered}"></span></dd>
+                <dt>Required:</dt>
+                <dd><span th:text="*{required}"></span></dd>
+                <dt>Customer:</dt>
+                <dd><span th:text="|*{customer.name}
+                                    *{customer.streetAndNumber}
+                                    *{customer.city}
+                                    *{customer.postalCode}
+                                    *{customer.state}
+                                    *{customer.country.name}|"></span></dd>
+                <dt>Comments:</dt>
+                <dd><span th:text="*{comments}"></span></dd>
+                <dt>Details:</dt>
+                <dd><span></span></dd>
+            </dl>
+         </div>
+
+<table th:if="${products}" th:each="product,custStat:${products}" th:object="${product}">
+        <thead th:if="${custStat.first}">
+        <tr>
+            <th>Product</th>
+            <th>Price Each</th>
+            <th>Quantity</th>
+            <th>Value</th>
+            <th>Deliverable</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="*{name}"></td>
+            <td th:text="*{price}"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <!--<td th:text="*{orderdetailSet.ordered}"></td>
+            <td th:text="${product.price}*${product.orderdetailSet.ordered}"></td>-->
+        </tr>
+        </tbody>
+        <tfoot th:if="${totaalPrijs}>0 and ${custStat.last}">
+            <span th:text="|Value : ${totaalPrijs}|"></span>
+        </tfoot>
+</table>
+</body>
+</html>

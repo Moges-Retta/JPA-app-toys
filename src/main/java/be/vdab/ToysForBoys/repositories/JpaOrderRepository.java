@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +20,15 @@ public class JpaOrderRepository implements OrderRepository {
     @Override
     public Optional<Order> findById(int id) {
         return Optional.ofNullable(manager.find(Order.class,id));
+    }
+
+    @Override
+    public List<Order> findByStaus(List<Status> status) {
+        return manager.createNamedQuery("Order.findByStatus", Order.class)
+                .setParameter("statusValues", status)
+                .setHint("javax.persistence.loadgraph",
+                        manager.createEntityGraph("Order.MET_CUSTOMER"))
+                .getResultList();
     }
 
     @Override

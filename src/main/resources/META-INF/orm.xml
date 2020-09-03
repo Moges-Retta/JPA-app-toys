@@ -17,4 +17,9 @@
         <query> update Product p set p.inOrder = :orderValue where p.id = :id
         </query>
     </named-query>
+    <named-query name='Order.findByStatus'>
+        <query> select o from Order o where o.status in :statusValues order by o.ordered
+        </query>
+    </named-query>
+
 </entity-mappings>

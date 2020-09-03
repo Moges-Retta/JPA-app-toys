@@ -1,5 +1,6 @@
 package be.vdab.ToysForBoys.repositories;
 
+import be.vdab.ToysForBoys.domain.Orderdetail;
 import be.vdab.ToysForBoys.domain.Status;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,14 +10,19 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(JpaOrderRepository.class)
-@Sql({"/insertCountry.sql","/insertCustomer.sql","/insertOrder.sql"})
-public class JpaOrderRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+@Sql({"/insertCountry.sql","/insertCustomer.sql","/insertOrder.sql",
+        "/insertProductline.sql","/insertProduct.sql","/insertOrderdetails.sql"})
+class JpaOrderRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
+    private static final String ORDERS = "orders";
+
     private JpaOrderRepository repository;
     private EntityManager manager;
 
@@ -40,6 +46,29 @@ public class JpaOrderRepositoryTest extends AbstractTransactionalJUnit4SpringCon
         assertThat(repository.findById(-1)).isNotPresent();
     }
 
+    @Test
+    void findByStaus(){
+        var statuses = List.of(Status.values());
+        assertThat(repository.findByStaus(statuses))
+                .hasSize(super.countRowsInTableWhere(ORDERS,
+                        "status in ('PROCESSING', 'WAITING', 'RESOLVED', 'CANCELLED', 'DISPUTED', 'SHIPPED')"));
+    }
+    @Test
+    void OrderDetailsLezen(){
+        repository.findById(idVanTestOrder()).get().getOrderdetailSet()
+                .forEach(orderdetail -> {
+                    assertThat(orderdetail.getOrdered().equals(BigDecimal.ZERO));
+                    assertThat(orderdetail.getPriceEach().equals(BigDecimal.ZERO));
+                });
+    }
+    @Test
+    void ProductLezen(){
+        repository.findById(idVanTestOrder()).get().getProducts()
+                .forEach(product -> {
+                    assertThat(product.getName().equals("test"));
+                    assertThat(product.getPrice().equals(BigDecimal.ZERO));
+                });
+    }
     @Test
     void updateStatus(){
         var id = idVanTestOrder();

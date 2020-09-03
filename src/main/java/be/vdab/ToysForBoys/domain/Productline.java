@@ -9,10 +9,9 @@ public class Productline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty
     private String name;
     private String description;
-    @NotEmpty
+    @Version
     private int version;
     protected Productline(){}
 

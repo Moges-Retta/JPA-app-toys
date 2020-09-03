@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 @Service
 @Transactional
@@ -21,6 +22,11 @@ public class DefaultOrderService implements OrderService{
     @Override
     public Optional<Order> findById(int id) {
         return Optional.of(repository.findById(id).get());
+    }
+
+    @Override
+    public List<Order> findByStatus(List<Status> status) {
+        return Optional.of(repository.findByStaus(status)).get();
     }
 
     @Override

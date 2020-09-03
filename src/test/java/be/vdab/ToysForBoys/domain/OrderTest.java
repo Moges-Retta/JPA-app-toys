@@ -14,6 +14,11 @@ import java.time.LocalDate;
 public class OrderTest {
     private Order order;
     private Orderdetail orderdetail;
+    private Product product;
+    private Productline productline;
+    private Product product1;
+    private Order order1;
+    private Orderdetail orderdetail1;
 
     @BeforeEach
     void beforeEach(){
@@ -21,14 +26,45 @@ public class OrderTest {
         var country = new Country("Belgium",1);
         var customer = new Customer("test","test1","test",
                 "test","3000",1,country);
-        order= new Order(date, date,date,1,customer,Status.PROCESSING);
-        orderdetail = new Orderdetail(1, BigDecimal.ONE);
+        productline = new Productline("test","test",1);
+        product = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
+        order= new Order(date, date,date,"test",1,customer,Status.PROCESSING);
+        orderdetail = new Orderdetail(BigDecimal.ONE, BigDecimal.ONE);
+        product1 = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
+        order1= new Order(date, date,date,"test1",1,customer,Status.PROCESSING);
+        orderdetail1 = new Orderdetail(BigDecimal.ONE, BigDecimal.TEN);
+
     }
     @Test
-    @DisplayName("order detail van order")
+    @DisplayName("meerdere order detail kunnen behoren tot een order")
     void orderDetail(){
-        assertThat(order.add(orderdetail)).isTrue();
+        assertThat(order1.add(orderdetail1)).isTrue();
+        assertThat(order1.add(orderdetail)).isTrue();
+        assertThat(order1.getOrderdetailSet()).containsOnly(orderdetail1, orderdetail);
     }
+    /*@Test
+    @DisplayName("order detail komt voor in order")
+    /*void orderdetailOrder() {
+        assertThat(order.getOrderdetailSet()).contains(orderdetail);
+        assertThat(orderdetail.getOrder()).isEqualTo(order);
+    }*/
+
+    @Test
+    @DisplayName("meerdere order kunnen behoren tot een product")
+    void orderProduct(){
+        assertThat(order1.addMany(product)).isTrue();
+        assertThat(order1.addMany(product1)).isTrue();
+        assertThat(order1.getProducts()).containsOnly(product, product1);
+    }
+    @Test
+    @DisplayName("order  komt voor in product")
+    void productOrder() {
+        order.addMany(product);
+        assertThat(order.getProducts()).contains(product);
+        assertThat(product.getOrders()).contains(order);
+    }
+
+
     @Test
     @DisplayName("null orderdetail toevoegen mislukt")
     void orderDetailNull(){

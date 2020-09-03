@@ -18,6 +18,7 @@ public class Customer {
     private String city;
     private String state;
     private String postalCode;
+    @Version
     private int version;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "countryId")
