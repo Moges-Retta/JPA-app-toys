@@ -23,7 +23,8 @@
             </dl>
          </div>
 
-<table th:if="${products}" th:each="product,custStat:${products}" th:object="${product}">
+<table th:if="${orderTables}"
+       th:each="orderTable,custStat:${orderTables}" th:object="${orderTable}">
         <thead th:if="${custStat.first}">
         <tr>
             <th>Product</th>
@@ -35,18 +36,16 @@
         </thead>
         <tbody>
         <tr>
-            <td th:text="*{name}"></td>
-            <td th:text="*{price}"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <!--<td th:text="*{orderdetailSet.ordered}"></td>
-            <td th:text="${product.price}*${product.orderdetailSet.ordered}"></td>-->
+            <td th:text="*{productName}"></td>
+            <td th:text="*{priceEach}"></td>
+            <td th:text="*{quantity}"></td>
+            <td th:text="*{totaal}"></td>
+            <td th:utext="${orderTable.quantity} - ${orderTable.inStock} <0? '&check;':'&cross;'" ></td>
         </tr>
         </tbody>
-        <tfoot th:if="${totaalPrijs}>0 and ${custStat.last}">
-            <span th:text="|Value : ${totaalPrijs}|"></span>
-        </tfoot>
 </table>
+<div>
+    <h3 th:text="|Value : ${totaalPrijs}|"></h3>
+</div>
 </body>
 </html>

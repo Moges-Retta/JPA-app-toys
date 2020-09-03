@@ -28,10 +28,10 @@ public class ProductTest {
         country=new Country("test",1);
         customer = new Customer("test","test","test","test","3000",1,country);
         order= new Order(date, date,date,"test",1,customer,Status.PROCESSING);
-        orderdetail = new Orderdetail(BigDecimal.ONE,BigDecimal.ONE);
+        orderdetail = new Orderdetail(1,BigDecimal.ONE);
         product1 = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
         order1= new Order(date, date,date,"test1",1,customer,Status.PROCESSING);
-        orderdetail1 = new Orderdetail(BigDecimal.ONE, BigDecimal.TEN);
+        orderdetail1 = new Orderdetail(1, BigDecimal.TEN);
     }
     @Test
     @DisplayName("order detail van product")
@@ -41,12 +41,17 @@ public class ProductTest {
         assertThat(product1.getOrderdetailSet()).containsOnly(orderdetail,orderdetail1);
 
     }
-   /* @Test
-    @DisplayName("order detail komt voor in order")
-   /* void orderdetailOrder() {
-        assertThat(product.getOrderdetailSet()).contains(orderdetail);
-        assertThat(orderdetail.getProduct()).isEqualTo(product);
-    }*/
+    @Test
+    @DisplayName("priceEach van  product")
+    void prijsEach(){
+        product.getOrderdetailSet().forEach(orderdetail2 -> assertThat(orderdetail2.getPriceEach())
+                .isEqualByComparingTo(BigDecimal.ONE));
+        product.add(orderdetail1);
+        product.getOrderdetailSet().forEach(orderdetail2 ->
+                assertThat(orderdetail2.getPriceEach().multiply(new BigDecimal(orderdetail2.getOrdered())))
+                        .isEqualByComparingTo(BigDecimal.TEN));
+    }
+
     @Test
     @DisplayName("null orderdetail toevoegen mislukt")
     void orderDetailNull(){

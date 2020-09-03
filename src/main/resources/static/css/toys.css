@@ -69,3 +69,8 @@ button{
     margin: 10px 0px;
     font-size:1.1em;
 }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}

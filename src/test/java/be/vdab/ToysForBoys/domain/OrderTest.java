@@ -29,10 +29,10 @@ public class OrderTest {
         productline = new Productline("test","test",1);
         product = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
         order= new Order(date, date,date,"test",1,customer,Status.PROCESSING);
-        orderdetail = new Orderdetail(BigDecimal.ONE, BigDecimal.ONE);
+        orderdetail = new Orderdetail(1, BigDecimal.ONE);
         product1 = new Product("test","1","test",1,1,BigDecimal.ONE,1,productline);
         order1= new Order(date, date,date,"test1",1,customer,Status.PROCESSING);
-        orderdetail1 = new Orderdetail(BigDecimal.ONE, BigDecimal.TEN);
+        orderdetail1 = new Orderdetail(1, BigDecimal.TEN);
 
     }
     @Test
@@ -42,12 +42,16 @@ public class OrderTest {
         assertThat(order1.add(orderdetail)).isTrue();
         assertThat(order1.getOrderdetailSet()).containsOnly(orderdetail1, orderdetail);
     }
-    /*@Test
-    @DisplayName("order detail komt voor in order")
-    /*void orderdetailOrder() {
-        assertThat(order.getOrderdetailSet()).contains(orderdetail);
-        assertThat(orderdetail.getOrder()).isEqualTo(order);
-    }*/
+    @Test
+    @DisplayName("priceEach van  product")
+    void prijsEach(){
+        order.getOrderdetailSet().forEach(orderdetail2 -> assertThat(orderdetail2.getPriceEach())
+                .isEqualByComparingTo(BigDecimal.ONE));
+        order.add(orderdetail1);
+        order.getOrderdetailSet().forEach(orderdetail2 ->
+                assertThat(orderdetail2.getPriceEach().multiply(new BigDecimal(orderdetail2.getOrdered())))
+                .isEqualByComparingTo(BigDecimal.TEN));
+    }
 
     @Test
     @DisplayName("meerdere order kunnen behoren tot een product")

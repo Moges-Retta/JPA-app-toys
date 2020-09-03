@@ -119,14 +119,14 @@ public class Order {
         this.comments = comments;
     }
 
-    public BigDecimal totalValue(){
+   /* public BigDecimal totalValue(){
         var totalPrijs = BigDecimal.ZERO;
         orderdetailSet.forEach(orderdetail -> {
             totalPrijs.add(orderdetail.getPriceEach()
                     .multiply(orderdetail.getOrdered()));
         });
         return totalPrijs;
-    }
+    }*/
     public boolean addMany(Product product) {
         var toegevoegd = products.add(product);
         if ( ! product.getOrders().contains(this)) {
@@ -138,4 +138,5 @@ public class Order {
     public Set<Product> getProducts() {
         return Collections.unmodifiableSet(products);
     }
+
 }

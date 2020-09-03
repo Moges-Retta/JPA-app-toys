@@ -57,7 +57,7 @@ class JpaOrderRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
     void OrderDetailsLezen(){
         repository.findById(idVanTestOrder()).get().getOrderdetailSet()
                 .forEach(orderdetail -> {
-                    assertThat(orderdetail.getOrdered().equals(BigDecimal.ZERO));
+                    assertThat(new BigDecimal(orderdetail.getOrdered()).equals(BigDecimal.ZERO));
                     assertThat(orderdetail.getPriceEach().equals(BigDecimal.ZERO));
                 });
     }
@@ -67,6 +67,20 @@ class JpaOrderRepositoryTest extends AbstractTransactionalJUnit4SpringContextTes
                 .forEach(product -> {
                     assertThat(product.getName().equals("test"));
                     assertThat(product.getPrice().equals(BigDecimal.ZERO));
+                });
+    }
+    @Test
+    void prijsEachLezen(){
+        repository.findById(idVanTestOrder()).get().getOrderdetailSet()
+                .forEach(orderdetail -> {
+                    assertThat(orderdetail.getPriceEach().equals(BigDecimal.ZERO));
+                });
+    }
+    @Test
+    void orderedLezen(){
+        repository.findById(idVanTestOrder()).get().getOrderdetailSet()
+                .forEach(orderdetail -> {
+                    assertThat(new BigDecimal(orderdetail.getOrdered()).equals(BigDecimal.ZERO));
                 });
     }
     @Test

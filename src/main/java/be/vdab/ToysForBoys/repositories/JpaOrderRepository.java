@@ -6,6 +6,7 @@ import be.vdab.ToysForBoys.domain.Status;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -46,4 +47,5 @@ public class JpaOrderRepository implements OrderRepository {
                 .setParameter("id",id)
                 .executeUpdate();
     }
+
 }

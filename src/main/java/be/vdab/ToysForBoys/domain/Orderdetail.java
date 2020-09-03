@@ -8,7 +8,7 @@ import java.util.Objects;
 @Embeddable
 @Access(AccessType.FIELD)
 public class Orderdetail {
-    private BigDecimal ordered;
+    private int ordered;
     private BigDecimal priceEach;
 
     /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -18,13 +18,13 @@ public class Orderdetail {
     @JoinColumn(name = "productId")
     private Product product;*/
 
-    public Orderdetail(BigDecimal ordered,  BigDecimal priceEach) {
+    public Orderdetail(int ordered,  BigDecimal priceEach) {
         this.ordered = ordered;
         this.priceEach = priceEach;
     }
     protected Orderdetail(){}
 
-    public BigDecimal getOrdered() {
+    public int getOrdered() {
         return ordered;
     }
 
@@ -59,7 +59,7 @@ public class Orderdetail {
         if (this == o) return true;
         if (!(o instanceof Orderdetail)) return false;
         Orderdetail that = (Orderdetail) o;
-        return ordered.equals(that.ordered) &&
+        return ordered==(that.ordered) &&
                 priceEach.equals(that.priceEach);
     }
 
