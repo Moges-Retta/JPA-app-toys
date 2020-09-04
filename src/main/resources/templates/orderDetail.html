@@ -23,7 +23,7 @@
             </dl>
          </div>
 
-<table th:if="${orderTables}"
+<table class="order" th:if="${orderTables}"
        th:each="orderTable,custStat:${orderTables}" th:object="${orderTable}">
         <thead th:if="${custStat.first}">
         <tr>

@@ -25,33 +25,35 @@ public class OrderController {
     }
     @GetMapping("{id}")
     public ModelAndView toonOrder(@PathVariable int id){
+        var order = service.findById(id).get();
         var modelAndView = new ModelAndView("orderDetail");
-        var prijsPerProduct = new ArrayList<BigDecimal>();
-        var prijs = new ArrayList<BigDecimal>();
+        var prijsPerProduct = new LinkedList<BigDecimal>();
+        var prijs = new LinkedList<BigDecimal>();
         var orderTable = new LinkedList<OrderTable>();
-        var ordered = new ArrayList<Integer>();
+        var ordered = new LinkedList<Integer>();
+        var orderdetails = new LinkedList<>(order.getOrderdetailSet());
+        var productName = new LinkedList<String>();
+        var productInStock = new LinkedList<Integer>();
 
 
-        var products = new LinkedList<>(service.findById(id).get().getProducts());
-        var orderdetails = new LinkedList<>(service.findById(id).get().getOrderdetailSet());
+        orderdetails
+                .forEach(orderdetail->{
+                            prijsPerProduct.add(orderdetail.getPriceEach()
+                                    .multiply(BigDecimal.valueOf((orderdetail.getOrdered()))));
+                            prijs.add(orderdetail.getPriceEach());
+                            ordered.add(orderdetail.getOrdered());
+                            productName.add(orderdetail.getProduct().getName());
+                            productInStock.add(orderdetail.getProduct().getInStock());
 
-        orderdetails
-                .forEach(orderdetail->prijsPerProduct.add(orderdetail.getPriceEach().multiply(new BigDecimal(orderdetail.getOrdered()))));
-        orderdetails
-                .forEach(orderdetail->prijs.add(orderdetail.getPriceEach()));
-        orderdetails
-                .forEach(orderdetail->ordered.add(orderdetail.getOrdered()));
+                });
 
         for(var i=0;i<prijs.size();i++){
-            orderTable.add(new OrderTable(products.get(i).getName(),prijs.get(i),ordered.get(i),
-                    prijs.get(i).multiply(new BigDecimal(ordered.get(i))), products.get(i).getInStock()));
+            orderTable.add(new OrderTable(productName.get(i),prijs.get(i),ordered.get(i),
+                    prijs.get(i).multiply(BigDecimal.valueOf(ordered.get(i))), productInStock.get(i)));
         }
-
-        modelAndView.addObject("orders",service.findById(id).get());
+        modelAndView.addObject("orders",order);
         modelAndView.addObject("orderTables",orderTable);
-
         modelAndView.addObject("totaalPrijs",prijsPerProduct.stream().reduce(BigDecimal::add).get());
-
         return modelAndView;
     }
 }

@@ -34,30 +34,6 @@ public class ProductTest {
         orderdetail1 = new Orderdetail(1, BigDecimal.TEN);
     }
     @Test
-    @DisplayName("order detail van product")
-    void orderDetail(){
-        assertThat(product1.add(orderdetail)).isTrue();
-        assertThat(product1.add(orderdetail1)).isTrue();
-        assertThat(product1.getOrderdetailSet()).containsOnly(orderdetail,orderdetail1);
-
-    }
-    @Test
-    @DisplayName("priceEach van  product")
-    void prijsEach(){
-        product.getOrderdetailSet().forEach(orderdetail2 -> assertThat(orderdetail2.getPriceEach())
-                .isEqualByComparingTo(BigDecimal.ONE));
-        product.add(orderdetail1);
-        product.getOrderdetailSet().forEach(orderdetail2 ->
-                assertThat(orderdetail2.getPriceEach().multiply(new BigDecimal(orderdetail2.getOrdered())))
-                        .isEqualByComparingTo(BigDecimal.TEN));
-    }
-
-    @Test
-    @DisplayName("null orderdetail toevoegen mislukt")
-    void orderDetailNull(){
-        assertThatNullPointerException().isThrownBy(() -> product.add(null));
-    }
-    @Test
     @DisplayName("inStock van product is 1")
     void inStock(){
         assertThat(product.getInStock()).isEqualTo(1);

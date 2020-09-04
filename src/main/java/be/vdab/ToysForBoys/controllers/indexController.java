@@ -1,6 +1,7 @@
 package be.vdab.ToysForBoys.controllers;
 
-import be.vdab.ToysForBoys.domain.Orderdetail;
+import be.vdab.ToysForBoys.domain.Order;
+import be.vdab.ToysForBoys.domain.Product;
 import be.vdab.ToysForBoys.domain.Status;
 import be.vdab.ToysForBoys.services.OrderService;
 import be.vdab.ToysForBoys.services.ProductService;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class indexController {
     private final OrderService service;
     private final ProductService pservice;
+    private ArrayList<Integer> idsVanOrders = new ArrayList<>();
 
     public indexController(OrderService service, ProductService pservice) {
         this.service = service;
@@ -28,29 +32,71 @@ public class indexController {
 
     @GetMapping
     public ModelAndView index() {
+        var modelAndView = new ModelAndView("index");
         var statuses = Arrays.stream(Status.values())
                 .filter(status -> status != Status.CANCELLED)
                 .filter(status -> status != Status.SHIPPED)
                 .collect(Collectors.toList());
-        return new ModelAndView("index", "orders", service.findByStatus(statuses));
+        modelAndView.addObject("orders", service.findByStatus(statuses));
+        modelAndView.addObject("IdsUpdateFailed", idsVanOrders);
+        return modelAndView;
     }
     @PostMapping(value="setAsShipped")
     public String updateStatus(int[] ids) {
-        var nieuweInStock = new LinkedList<Integer>();
-        var nieuweInOrder = new LinkedList<Integer>();
-        var ordered = new LinkedList<Integer>();
         if (ids != null) {
             Arrays.stream(ids).forEach(id->{
-                service.updateStatusValue(id, Status.SHIPPED);
-                /*service.updateShippedValue(id, LocalDate.now());
-                service.findById(id).get().getOrderdetailSet()
-                        .forEach(orderdetail -> ordered.add(orderdetail.getOrdered()));
-                pservice.findById(id).get().getOrderdetailSet()
-                .forEach(orderdetail -> orderdetail.);*/
+                var ordered = new LinkedList<Integer>();
+                var products = new LinkedList<Product>();
+                var orderIds = new LinkedList<Integer>();
+                var oudeStatus = new LinkedList<Status>();
+                var oudeShipped = new LinkedList<LocalDate>();
 
+                var order = service.findById(id).get();
+
+                orderIds.add(order.getId());
+                products.addAll(order.getProducts());
+                order.getOrderdetailSet().forEach(orderdetail -> ordered.add(orderdetail.getOrdered()));
+
+                oudeStatus.add(order.getStatus());
+                oudeShipped.add(order.getShipped());
+
+                updateTables(id,products, orderIds, ordered, oudeStatus, oudeShipped);
             });
 
         }
         return "redirect:/";
+    }
+    public void updateTables(int id,LinkedList<Product> products,LinkedList<Integer> orderIds,
+                             LinkedList<Integer> ordered,LinkedList<Status> oudeStatus,
+                             LinkedList<LocalDate> oudeShipped){
+        for(var i=0;i<products.size();i++){
+            if(products.get(i).getInStock()<ordered.get(i)){
+                idsVanOrders.add(id);
+            }
+            /*else {
+                products.get(i).updateInOrder(products.get(i).getInOrder() - ordered.get(i));
+                products.get(i).updateInStock(products.get(i).getInStock() - ordered.get(i));
+            }*/
+        }
+        if(idsVanOrders.size()==0){
+            for(var i=0;i<products.size();i++) {
+                service.updateStatusValue(id, Status.SHIPPED);
+                service.updateShippedValue(id, LocalDate.now());
+                products.get(i).updateInOrder(products.get(i).getInOrder() - ordered.get(i));
+                products.get(i).updateInStock(products.get(i).getInStock() - ordered.get(i));
+            }
+        }
+        // als de voorraad niet genoeg is, de verandering van status and shipped zijn ongedaan
+        /*if(idsVanOrders.size()!=0){
+            for(var i=0;i<products.size();i++){
+                var id = orderIds.getFirst();
+                products.get(i).updateInOrder(products.get(i).getInOrder() + ordered.get(i));
+                products.get(i).updateInStock(products.get(i).getInStock() + ordered.get(i));
+                service.findById(id).get()
+                        .updateStatus(oudeStatus.get(i));
+                service.findById(id).get()
+                        .updateShipped(oudeShipped.get(i));
+            }
+        }*/
     }
 }

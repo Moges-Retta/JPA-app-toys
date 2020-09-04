@@ -41,14 +41,6 @@ class JpaProductRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
-    void OrderDetailsLezen(){
-        repository.findById(idVanTestProduct()).get().getOrderdetailSet()
-                .forEach(orderdetail -> {
-                    assertThat(new BigDecimal(orderdetail.getOrdered()).equals(BigDecimal.ZERO));
-                    assertThat(orderdetail.getPriceEach().equals(BigDecimal.ZERO));
-                });
-    }
-    @Test
     void OrderLezen() {
         repository.findById(idVanTestProduct()).get().getOrders()
                 .forEach(order -> {

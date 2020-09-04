@@ -30,10 +30,6 @@ public class Product {
     @JoinColumn(name = "productlineId")
     private Productline productline;
 
-    @ElementCollection
-    @CollectionTable(name = "orderdetails",
-            joinColumns = @JoinColumn(name = "productId"))
-    private Set<Orderdetail> orderdetailSet;
     @ManyToMany(mappedBy = "products")
     private Set<Order> orders = new LinkedHashSet<>();
 
@@ -49,13 +45,6 @@ public class Product {
         this.price = price;
         this.version = version;
         this.productline=productline;
-        this.orderdetailSet=new LinkedHashSet<>();
-    }
-    public boolean add(Orderdetail orderdetail) {
-        if (orderdetail == null) {
-            throw new NullPointerException();
-        }
-        return orderdetailSet.add(orderdetail);
     }
     public String getName() {
         return name;
@@ -93,9 +82,6 @@ public class Product {
         return id;
     }
 
-    public Set<Orderdetail> getOrderdetailSet() {
-        return Collections.unmodifiableSet(orderdetailSet);
-    }
     public void updateInOrder(int value){
         if (value < 0) {
             throw new IllegalArgumentException();

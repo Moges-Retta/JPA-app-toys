@@ -2,7 +2,15 @@
 <html lang="en " xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments::head(title='Toys For Boys')"></head>
 <body>
+<script th:src="@{/js/preventDoubleSubmit.js}" defer></script>
 <h2>Unshipped Orders</h2>
+<h3 class="error" th:if="not ${IdsUpdateFailed.empty}"
+    th:text="|shipping failed for order(s) ${IdsUpdateFailed},not enough stock|">
+</h3>
+
+<ul >
+    <li ></li>
+</ul>
 <table>
     <form th:if="${orders}"
           method="post" th:action="@{/setAsShipped}">
